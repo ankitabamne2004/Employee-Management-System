@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payroll Dashboard</title>
+    <link rel="stylesheet" href="/css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+        /* Styles as before */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .actions i {
+            cursor: pointer;
+            margin: 0 5px;
+            color: #4CAF50;
+        }
+        .monthly-calendar {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .monthly-calendar .day, .monthly-calendar .month {
+            padding: 10px;
+            border: 1px solid #ddd;
+            background-color: #f9f9f9;
+        }
+        .monthly-calendar .day a, .monthly-calendar .month a {
+            text-decoration: none;
+            color: #333;
+        }
+        .calendar-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            border: 1px solid #ddd;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h2>Menu</h2>
+                <button id="toggleSidebar">☰</button>
+            </div>
+            <ul class="sidebar-menu">
+                <li><a href="/admin/dashboard">Home</a></li>
+                <li><a href="#employees" class="dropdown-toggle">Employees</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/admin/add-employee">Add Employee</a></li>
+                        <li><a href="/admin/employees/all">All Employees</a></li>
+                    </ul>
+                </li>
+                <li><a href="#applications" class="dropdown-toggle">Leave Applications</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/admin/leave-applications">All Leaves</a></li>
+                    </ul>
+                </li>
+                <li><a href="/admin/Attendance">Attendance</a></li>
+                <li><a href="#payrolls">Payrolls</a></li>
+                <li><a href="/admin/feedback">Feedback</a></li>
+                <li><a href="/">Logout</a></li>
+            </ul>
+        </nav>
+        <div class="main-content">
+            <h1>Payroll Dashboard</h1>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tr id="employeeTableBody">
+                    <% employees.forEach(employee => { %>
+                        <tr>
+                            <td><%=employee.emp_id%></td>
+                            <td><%=employee.username%></td>
+                            <td><%=employee.email%></td>
+                            <td><%=employee.number%></td>
+                            <td class="actions">
+                                <i class="fas fa-file-alt salary-slip" onclick="openCalendar(event,'<%=employee.username%>', '<%=employee.emp_id%>')"></i>
+                            </td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        </div>
+        <div id="calendarPopup" class="calendar-popup">
+            <div class="year-selector">
+                <form method="get" action="">
+                  <label for="year">Select Year:</label>
+                  <select id="year" name="year" onchange="this.form.submit()">
+                    <% const currentYear = new Date().getFullYear(); %>
+                    <% for (let year = currentYear; year >= 2020; year--) { %>
+                      <option value="<%= year %>"<%= year == parseInt(req.query.year || currentYear) ? 'selected' : '' %>>
+                        <%= year %>
+                      </option>
+                    <% } %>
+                  </select>
+                </form>
+              </div>         
+            <h3>Select Month for Salary</h3> 
+            <div class="monthly-calendar">
+                <% months.forEach((month, index) => { %>
+                    <div class="month">
+                        <a data-year="<%=  req.query.year || new Date().getFullYear() %>" data-month="<%= month %>" class="atag" id="<%= month %>_<%= req.query.year || new Date().getFullYear() %>">
+                            <%= month %> <%= req.query.year || new Date().getFullYear() %> 
+                            <span class="status"></span>
+                        </a>
+                    </div>
+                <% }); %>
+            </div>
+        </div>
+        
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+            const sidebar = document.querySelector('.sidebar');
+            const toggleSidebarButton = document.getElementById('toggleSidebar');
+            const loginInfo = document.getElementById('loginInfo');
+
+            // Toggle sidebar
+            toggleSidebarButton.addEventListener('click', () => {
+                sidebar.classList.toggle('closed');
+                if (sidebar.classList.contains('closed')) {
+                    toggleSidebarButton.textContent = '☰'; // Show the open icon
+                } else {
+                    toggleSidebarButton.textContent = '☰'; // Show the close icon
+                }
+            });
+
+   
+         });
+
+         
+    </script>
+    <script src="/javascripts/hello.js"></script>
+
+</body>
+</html>

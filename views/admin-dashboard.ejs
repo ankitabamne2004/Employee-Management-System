@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" type="text/css" href="/css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Notification Form Styling */
+        #notification-form input[type="text"], 
+        #notification-form textarea {
+            width: 90%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            font-size: 14px;
+            font-family: 'Arial', sans-serif;
+        }
+
+        #notification-form button[type="submit"] {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        #notification-form button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        #notification-form {
+            padding: 10px;
+            border: 1px solid #ddd;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        /* Notification styles */
+        .notifications {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            z-index: 2;
+        }
+
+        #notificationBell {
+            border-radius: 2px;
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 2;
+        }
+
+        #notificationDropdown {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 40px;
+            background-color: #fff;
+            min-width: 300px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        .dropdown-content ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .dropdown-content ul li {
+            padding: 10px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .dropdown-content ul li button {
+            margin-right: 10px;
+            padding: 5px 10px;
+        }
+
+        /* General Modal Styles */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5); /* Black background with opacity */
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    width: 400px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.modal-header {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.modal-body {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.modal-body input,
+.modal-body textarea {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    resize: none;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+}
+
+.confirm-btn {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.confirm-btn:hover {
+    background-color: #0056b3;
+}
+
+.cancel-btn {
+    background-color: #f44336;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.cancel-btn:hover {
+    background-color: #c62828;
+}
+
+/* Animation for Modal */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 200px;
+            }
+
+            .main-content {
+                margin-left: 200px;
+            }
+
+            #notificationDropdown {
+                min-width: 250px;
+            }
+
+            .notifications {
+                top: 10px;
+                right: 10px;
+            }
+        }
+        #learnMoreBtn {
+    background: linear-gradient(to right,  #4b97e2, #2e82e7);
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+#learnMoreBtn:hover {
+    background: linear-gradient(to right, #4b97e2, #2e82e7);
+    box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.3);
+    transform: scale(1.05);
+}
+
+#learnMoreBtn:active {
+    transform: scale(0.98);
+    box-shadow: none;
+}
+
+
+        .info-card {
+    width: 50%;
+    max-width: 600px;
+    margin: auto;
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: none;
+    z-index: 1000;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    z-index: 999;
+}
+
+.close-btn {
+    background-color: red;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    margin-top: 10px;
+    border-radius: 5px;
+}
+
+.close-btn:hover {
+    background-color: darkred;
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h2>Menu</h2>
+                <button id="toggleSidebar">☰</button>
+            </div>
+            <ul class="sidebar-menu">
+                <li><a href="/admin/dashboard">Home</a></li>
+                <li><a href="#employees" class="dropdown-toggle">Employees</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/admin/add-employee">Add Employee</a></li>
+                        <li><a href="/admin/employees/all">All Employees</a></li>
+                    </ul>
+                </li>
+                <li><a href="#applications" class="dropdown-toggle">Leave Applications</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/admin/leave-applications">All Leaves</a></li>
+                    </ul>
+                </li>
+                <li><a href="/admin/Attendance">Attendance</a></li>
+                <li><a href="/admin/payroll">Payrolls</a></li>
+                <li><a href="/admin/feedback">Feedback</a></li>
+                <li><a href="/">Logout</a></li>
+            </ul>
+        </nav>
+        <div class="main-content">
+            <h1>Welcome to the Admin Dashboard</h1>
+            <section class="content">
+                <h1>ITEM INFLUX</h1>
+                <p>COMPANY</p>
+                <p>Item Influx is an small startup based company with products providing at very low cost. Products are designed to meet the needs of customers and provide them wih the lastest technology and gadgets.</p>
+                <!-- <button>Learn More</button> -->
+                <button id="learnMoreBtn">Learn More</button>
+            </section>
+            <div class="notifications">
+                <button id="notificationBell">
+                    <i class="fas fa-bell"></i>
+                </button>
+                <div id="notificationDropdown" class="dropdown-content">
+                    <h3>Notifications</h3>
+                    <button id="show-form-btn">Post New Notification</button>
+                    <button id="show">Show All Notification</button>
+                    <ul id="notificationList"></ul>
+        
+                    <form id="notification-form" style="display: none;" enctype="multipart/form-data">
+                        <input type="text" id="notification-title" placeholder="Enter notification title" required />
+                        <textarea id="notification-message" placeholder="Enter message" required></textarea>
+                        <div class="file-upload-container">
+                            <label for="notification-attachment">Attach File:</label>
+                            <input type="file" id="notification-attachment" name="attachment" accept=".pdf,.docx,.xlsx,.jpg,.jpeg,.png" />
+                        </div><br>
+                        <button type="submit">Post Notification</button>
+                    </form>
+                </div>
+            </div>
+            <div id="deleteModal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">Confirm Delete</div>
+                    <div class="modal-body">
+                        Are you sure you want to delete this notification?
+                    </div>
+                    <div class="modal-footer">
+                        <button class="confirm-btn" id="confirmDeleteBtn">Yes</button>
+                        <button class="cancel-btn" id="cancelDeleteBtn">No</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">Edit Notification</div>
+            <div class="modal-body">
+                <form id="editNotificationForm">
+                    <input type="text" id="editTitle" placeholder="Enter title" required />
+                    <textarea id="editMessage" placeholder="Enter message" required></textarea>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="confirm-btn" id="saveEditBtn">Save</button>
+                <button class="cancel-btn" id="cancelEditBtn">Cancel</button>
+            </div>
+        </div>
+    </div>
+    <!-- Overlay background -->
+<div class="overlay" id="overlay"></div>
+
+    <div class="info-card" id="infoCard">
+        <img src="/logo.png" alt="Information Image">
+        <p class="description">To know more or to try, you can check our <a href="https://iteminflux.odoo.com/" target="_blank">official website</a>.</p>
+        <button class="close-btn" onclick="closeCard()">Close</button>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const sidebar = document.querySelector('.sidebar');
+            const toggleSidebarButton = document.getElementById('toggleSidebar');
+            const notificationBell = document.getElementById('notificationBell');
+            const notificationDropdown = document.getElementById('notificationDropdown');
+            const notificationForm = document.getElementById('notification-form');
+            const showFormBtn = document.getElementById('show-form-btn');
+            const notificationAll = document.getElementById('show');
+            const notificationList = document.getElementById('notificationList');
+            let deleteNotificationId = null;
+            window.editNotification = function (id, title, message) {
+    // Populate the modal with the current values
+    document.getElementById('editTitle').value = title;
+    document.getElementById('editMessage').value = message;
+
+    // Show the modal
+    const editModal = document.getElementById('editModal');
+    editModal.style.display = 'flex';
+
+    // Save changes
+    document.getElementById('saveEditBtn').onclick = async () => {
+        const updatedTitle = document.getElementById('editTitle').value;
+        const updatedMessage = document.getElementById('editMessage').value;
+
+        if (updatedTitle && updatedMessage) {
+            try {
+                const response = await fetch(`/admin/notifications/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ title: updatedTitle, message: updatedMessage }),
+                });
+
+                if (response.ok) {
+                    const updatedNotification = await response.json();
+                    document.querySelector(`#notification-${id} .notification-text`).innerHTML = `
+                        <strong>${updatedNotification.title}</strong> - ${updatedNotification.message}
+                        <br>
+                        <small>${new Date(updatedNotification.createdAt).toLocaleDateString()}</small>
+                        ${updatedNotification.attachment ? `<a href="/${updatedNotification.attachment}" target="_blank">View Attachment</a>` : ''}
+                    `;
+                } else {
+                    console.error('Failed to update notification');
+                }
+            } catch (error) {
+                console.error('Error updating notification:', error);
+            } finally {
+                editModal.style.display = 'none'; // Close modal
+            }
+        }
+    };
+    // Cancel edit
+    document.getElementById('cancelEditBtn').onclick = () => {
+        editModal.style.display = 'none'; // Close modal
+    };
+};
+
+            // Toggle sidebar
+            toggleSidebarButton.addEventListener('click', () => {
+                sidebar.classList.toggle('closed');
+                toggleSidebarButton.textContent = sidebar.classList.contains('closed') ? '☰' : '☰';
+            });
+    
+            // Show/hide notification dropdown
+            notificationBell.addEventListener('click', () => {
+                notificationDropdown.style.display = notificationDropdown.style.display === 'block' ? 'none' : 'block';
+            });
+    
+            // Show form on button click
+            showFormBtn.addEventListener('click', () => {
+                notificationForm.style.display = 'block';
+                notificationList.style.display = 'none';
+            });
+    
+            // Submit notification form
+            notificationForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const title = document.getElementById('notification-title').value;
+                const message = document.getElementById('notification-message').value;
+                const attachment = document.getElementById('notification-attachment').files[0];
+                const formData = new FormData();
+                formData.append('title', title);
+                formData.append('message', message);
+                if (attachment) {
+                    formData.append('attachment', attachment);
+                }
+    
+                try {
+                    const response = await fetch('/admin/notifications', {
+                        method: 'POST',
+                        body: formData,
+                    });
+    
+                    if (response.ok) {
+                        const newNotification = await response.json();
+                        addNotificationToList(newNotification);
+                        notificationForm.reset();
+                        notificationForm.style.display = 'none';
+                    } else {
+                        console.error('Failed to post notification');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                }
+            });
+    
+            // Show all notifications
+            notificationAll.addEventListener('click', () => {
+                notificationForm.style.display = 'none';
+                notificationList.style.display = 'block';
+    
+                // Fetch and display notifications
+                fetch('/admin/notifications')
+                    .then((response) => response.json())
+                    .then((data) => {
+                        notificationList.innerHTML = '';
+                        if (data.length === 0) {
+                            notificationList.innerHTML = '<li>No notifications available</li>';
+                        } else {
+                            data.forEach(addNotificationToList);
+                        }
+                    })
+                    .catch((error) => {
+                        console.error('Error loading notifications:', error);
+                        notificationList.innerHTML = '<li>Failed to load notifications.</li>';
+                    });
+            });
+    
+            // Add notification to the list
+            function addNotificationToList(notification) {
+                const listItem = document.createElement('li');
+                listItem.id = `notification-${notification._id}`;
+                listItem.innerHTML = `
+                    <div class="notification-text">
+                        <strong>${notification.title}</strong> - ${notification.message}
+                        <br>
+                        <small>${new Date(notification.createdAt).toLocaleDateString()}</small>
+                        ${notification.attachment ? `<a href="/${notification.attachment}" target="_blank">View Attachment</a>` : ''}
+                    </div>
+                    <div class="notification-actions">
+                        <button onclick="editNotification('${notification._id}', '${notification.title}', '${notification.message}')">Edit</button>
+                        <button onclick="openDeleteModal('${notification._id}')">Delete</button>
+                    </div>
+                `;
+                notificationList.appendChild(listItem);
+            }  
+            // Delete modal handling
+            window.openDeleteModal = function (id) {
+                deleteNotificationId = id;
+                document.getElementById('deleteModal').style.display = 'flex';
+            };
+    
+            document.getElementById('confirmDeleteBtn').addEventListener('click', async () => {
+                if (deleteNotificationId) {
+                    try {
+                        const response = await fetch(`/admin/notifications/${deleteNotificationId}`, {
+                            method: 'DELETE',
+                        });
+    
+                        if (response.ok) {
+                            document.getElementById(`notification-${deleteNotificationId}`).remove();
+                        } else {
+                            console.error('Failed to delete notification');
+                        }
+                    } catch (error) {
+                        console.error('Error deleting notification:', error);
+                    }
+    
+                    deleteNotificationId = null;
+                    document.getElementById('deleteModal').style.display = 'none';
+                }
+            });
+    
+            document.getElementById('cancelDeleteBtn').addEventListener('click', () => {
+                document.getElementById('deleteModal').style.display = 'none';
+            });
+        });
+        document.getElementById("learnMoreBtn").addEventListener("click", function () {
+            document.getElementById("infoCard").style.display = "block";
+            document.getElementById("overlay").style.display = "block";
+        });
+
+        function closeCard() {
+            document.getElementById("infoCard").style.display = "none";
+            document.getElementById("overlay").style.display = "none";
+        }
+    </script>           
+</body>
+</html>

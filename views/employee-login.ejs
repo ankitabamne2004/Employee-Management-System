@@ -1,0 +1,48 @@
+<!--DOCTYPE html>
+<html>
+<head>
+  <title>Employee Login</title>
+  <link rel="stylesheet" type="text/css" href="/css/styles.css">
+</head>
+<body>
+  <h1>Employee Login</h1>
+  <form action="/employee/login" method="post">
+    <input type="text" name="emp_id" placeholder="Employee ID" required>
+    <input type="text" name="username" placeholder="Username" required>
+    <input type="email" name="email" placeholder="Email" required>
+    <input type="password" name="password" placeholder="Password" required>
+    <button type="submit">Login</button>
+  </form>
+</body>
+</html-->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Employee Login</title>
+  <link rel="stylesheet" type="text/css" href="/css/styles.css">
+</head>
+<body>
+  <div class="login-box">
+    <h1>Employee Login</h1>
+    <form action="/employee/login" method="post">
+      <div class="textbox">
+        <label for="emp_id">Employee ID:</label>
+        <input type="text" id="emp_id" name="emp_id" placeholder="Enter Employee ID" required>
+      </div>
+      <div class="textbox">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" placeholder="Enter Username" required>
+      </div>
+      <div class="textbox">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" placeholder="Enter Email" required>
+      </div>
+      <div class="textbox">
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" placeholder="Enter Password" required>
+      </div>
+      <button type="submit" class="btn-login">Login</button>
+    </form>
+  </div>
+</body>
+</html>

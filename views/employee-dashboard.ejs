@@ -1,0 +1,348 @@
+<!-- <!DOCTYPE html>
+<html>
+<head>
+    <title>Employee Dashboard</title>
+    <link rel="stylesheet" type="text/css" href="/css/emp.css">
+</head>
+<body>
+    <div class="container">
+        <button id="toggleSidebar">☰</button> 
+        <nav class="sidebar">
+        <div class="sidebar-header">
+                <h2>Menu</h2>
+            </div>
+            <ul class="sidebar-menu">
+                <li><a href="/employee/dashboard/<%= employee.emp_id %>">Home</a></li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle">Leave</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/employee/apply-leave">Apply Leave</a></li>
+                        <li><a href="/employee/leave-history/<%= employee.emp_id %>">Leave History</a></li>
+                    </ul>
+                </li>
+                <li><a href="/employee/attendance">Attendance</a></li>
+                <li><a href="/employee/payroll">Payrolls</a></li>
+                <li><a href="/">Logout</a></li>
+            </ul>
+        </nav>
+        <main class="main-content">
+            <div class="header">
+                <h2>Login as: <%= employee.username %></h2>
+            </div>
+            <div class="profile-info">
+                <h1>Employee Dashboard</h1>
+                <p>Welcome, <%= employee.username %></p>
+                <p>Email: <%= employee.email %></p>
+                <p>Salary: <%= employee.salary %></p>
+                <p>Address: <%= employee.address %></p>
+                <p>Phone Number: <%= employee.number %></p>
+            </div>
+        </div>
+    </div>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+    const sidebar = document.querySelector('.sidebar');
+    const toggleSidebarButton = document.getElementById('toggleSidebar');
+    const loginInfo = document.getElementById('loginInfo');
+
+    toggleSidebarButton.addEventListener('click', () => {
+        sidebar.classList.toggle('closed');
+        if (sidebar.classList.contains('closed')) {
+            toggleSidebarButton.textContent = '☰'; 
+        } else {
+            toggleSidebarButton.textContent = '☰'; 
+        }
+    });
+
+    fetch('/api/user', {
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        loginInfo.textContent = `Login as: ${data.username}`;
+    })
+    .catch(error => {
+        console.error('Error fetching user info:', error);
+    });
+});
+  </script>
+</body>
+</html> -->
+<!-- <!DOCTYPE html>
+<html>
+<head>
+    <title>Employee Dashboard</title>
+    <link rel="stylesheet" type="text/css" href="/css/emp.css">
+</head>
+<body>
+    <div class="container">
+        <button id="toggleSidebar">☰</button> 
+        <nav class="sidebar">
+        <div class="sidebar-header">
+                <h2>Menu</h2>
+            </div>
+            <ul class="sidebar-menu">
+                <li><a href="/employee/dashboard/<%= employee.emp_id %>">Home</a></li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle">Leave</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/employee/apply-leave">Apply Leave</a></li>
+                        <li><a href="/employee/leave-history/<%= employee.emp_id %>">Leave History</a></li>
+                    </ul>
+                </li>
+                <li><a href="/employee/attendance">Attendance</a></li>
+                <li><a href="/employee/payroll">Payrolls</a></li>
+                <li><a href="/">Logout</a></li>
+            </ul>
+        </nav>
+        <main class="main-content">
+            <div class="header">
+                <h2>Login as: <%= employee.username %></h2>
+            </div>
+            <div class="profile-info">
+                <h1>Employee Dashboard</h1>
+                <p>Welcome, <%= employee.username %></p>
+                <p>Email: <%= employee.email %></p>
+                <p>Salary: <%= employee.salary %></p>
+                <p>Address: <%= employee.address %></p>
+                <p>Phone Number: <%= employee.number %></p>
+            </div>
+        </div>
+    </div>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+    const sidebar = document.querySelector('.sidebar');
+    const toggleSidebarButton = document.getElementById('toggleSidebar');
+    const loginInfo = document.getElementById('loginInfo');
+
+    toggleSidebarButton.addEventListener('click', () => {
+        sidebar.classList.toggle('closed');
+        if (sidebar.classList.contains('closed')) {
+            toggleSidebarButton.textContent = '☰'; 
+        } else {
+            toggleSidebarButton.textContent = '☰'; 
+        }
+    });
+
+    fetch('/api/user', {
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        loginInfo.textContent = `Login as: ${data.username}`;
+    })
+    .catch(error => {
+        console.error('Error fetching user info:', error);
+    });
+});
+  </script>
+</body>
+</html> -->
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Employee Dashboard</title>
+    <link rel="stylesheet" type="text/css" href="/css/emp.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .notifications {
+            position: absolute;
+            /* Position the notifications container absolutely */
+            top: 20px;
+            /* Distance from the top */
+            right: 20px;
+            /* Distance from the right */
+            display: flex;
+            flex-direction: column;
+            /* Stack dropdown and bell */
+            align-items: flex-end;
+            /* Align items to the end */
+            z-index: 2;
+            /* Ensure it is above other elements */
+        }
+
+        #notificationBell {
+            border-radius: 2px;
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 2;
+            /* Ensure it sits above other elements */
+        }
+
+        #notificationDropdown {
+            display: none;
+            position: absolute;
+            right: 0;
+            /* Align to the right of the bell */
+            top: 40px;
+            /* Adjust top position */
+            background-color: #fff;
+            min-width: 300px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            z-index: 1;
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        /* Dropdown content styles */
+        .dropdown-content ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .dropdown-content ul li {
+            padding: 10px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .dropdown-content ul li button {
+            margin-right: 10px;
+            padding: 5px 10px;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 200px;
+                /* Adjusted width for smaller screens */
+            }
+
+            .main-content {
+                margin-left: 200px;
+                /* Adjust the margin-left for the main content */
+            }
+
+            #notificationDropdown {
+                min-width: 250px;
+                /* Smaller width for smaller screens */
+            }
+
+            /* Adjust notification bell position for mobile */
+            .notifications {
+                top: 10px;
+                /* Move closer to the top on smaller screens */
+                right: 10px;
+                /* Adjust right position for smaller screens */
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <button id="toggleSidebar">☰</button> <!-- Move the button outside the sidebar -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h2 style="color: #fff;">Menu</h2>
+            </div>
+            <ul class="sidebar-menu">
+                <li><a href="/employee/dashboard/<%= employee.emp_id %>">Home</a></li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle">Leave</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/employee/apply-leave">Apply Leave</a></li>
+                        <li><a href="/employee/leave-history/<%= employee.emp_id %>">Leave History</a></li>
+                    </ul>
+                </li>
+                <li><a href="/employee/attendance">Attendance</a></li>
+                <li><a href="/employee/payroll">Payrolls</a></li>
+                <li><a href="/employee/<%= employee.emp_id %>/qr">Feedback</a></li>
+                <li><a href="/">Logout</a></li>
+            </ul>
+        </nav>
+        <main class="main-content">
+            <div class="header">
+                <h2>Login as: <%= employee.username %>
+                </h2>
+            </div>
+            <div class="profile-info">
+                <h1>Employee Dashboard</h1>
+                <p>Welcome, <%= employee.username %>
+                </p>
+                <p>Email: <%= employee.email %>
+                </p>
+                <p>Salary: <%= employee.salary %>
+                </p>
+                <p>Address: <%= employee.address %>
+                </p>
+                <p>Phone Number: <%= employee.number %>
+                </p>
+            </div>
+        </main>
+
+        <div class="notifications">
+            <button id="notificationBell">
+                <i class="fas fa-bell"></i>
+            </button>
+
+            <!-- Notification Dropdown -->
+            <div id="notificationDropdown" class="dropdown-content">
+                <h3>Notifications</h3>
+                <ul id="notificationList"></ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const sidebar = document.querySelector('.sidebar');
+            const toggleSidebarButton = document.getElementById('toggleSidebar');
+            const notificationBell = document.getElementById('notificationBell');
+            const notificationDropdown = document.getElementById('notificationDropdown');
+            const notificationList = document.getElementById('notificationList');
+
+            // Toggle sidebar
+            toggleSidebarButton.addEventListener('click', () => {
+                sidebar.classList.toggle('closed');
+                if (sidebar.classList.contains('closed')) {
+                    toggleSidebarButton.textContent = '☰'; // Show the open icon
+                } else {
+                    toggleSidebarButton.textContent = '☰'; // Show the close icon
+                }
+            });
+
+            // Toggle notification dropdown
+            notificationBell.addEventListener('click', () => {
+                notificationDropdown.style.display = notificationDropdown.style.display === 'block' ? 'none' : 'block';
+            });
+
+            // Fetch and display notifications
+            fetch('/admin/notifications')
+                .then(response => response.json()) // Ensure the response is JSON
+                .then(data => {
+                    console.log(data)
+                    notificationList.innerHTML = ''; // Clear any existing content
+                    if (data.length === 0) {
+                        notificationList.innerHTML = '<li>No notifications available</li>';
+                    } else {
+                        data.forEach(notification => {
+                            const listItem = document.createElement('li');
+                            listItem.innerHTML = `
+                                <div class="notification-text">
+    <strong>${notification.title}</strong> - ${notification.message}
+    <br>
+    <small class="notdate">${new Date(notification.createdAt).toLocaleDateString()}</small>
+    ${notification.attachment ? `<a href="/${notification.attachment}" target="_blank">View Attachment</a>` : ''}
+    ${notification.edited ? `<p style="color:grey">Edited </p>` : ''}
+</div>
+
+                            `;
+                            notificationList.appendChild(listItem);
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading notifications:', error);
+                    notificationList.innerHTML = '<li>Failed to load notifications.</li>';
+                });
+        });
+    </script>
+
+</body>
+
+</html>

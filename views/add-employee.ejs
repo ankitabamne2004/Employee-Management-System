@@ -1,0 +1,42 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Add Employee</title>
+  <link rel="stylesheet" type="text/css" href="/css/addemp.css">
+</head>
+<body>
+  <%- include('navbar.ejs') %>
+  <div class="login-container">
+    <h1>Add Employee</h1>
+    <form action="/admin/add-employee" method="post">
+      <div class="input-group">
+        <label for="username">Username:</label>
+        <input type="text" name="username" id="username" placeholder="Enter Username" required>
+      </div>
+      <div class="input-group">
+        <label for="password">Password:</label>
+        <input type="password" name="password" id="password" placeholder="Enter Password" required>
+      </div>
+      <div class="input-group">
+        <label for="email">Email:</label>
+        <input type="email" name="email" id="email" placeholder="Enter Email" required>
+      </div>
+      <div class="input-group">
+        <label for="salary">Salary:</label>
+        <input type="number" name="salary" id="salary" placeholder="Enter Salary" min="5000" max="80000" required>
+      </div>
+      <div class="input-group">
+        <label for="address">Address:</label>
+        <input type="text" name="address" id="address" placeholder="Enter Address" required>
+      </div>
+      <div class="input-group">
+        <label for="number">Phone Number:</label>
+        <input type="text" name="number" id="number" placeholder="Enter Phone Number" pattern="\d{10}" title="Phone number should be 10 digits" required>
+      </div>
+      <button type="submit">Add Employee</button>
+    </form>
+  </div>
+</body>
+</html>
+

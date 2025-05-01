@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Payheads to Employee</title>
+    <style>
+        body {
+            background-color: #D1E9F6;
+            font-family: Arial, sans-serif;
+            color: #326273;
+        }
+        .container {
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background-color: #eee;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        h2, h3 {
+            text-align: center;
+            color: #326273;
+        }
+        h3 {
+            margin-top: 10px;
+        }
+        .back-button {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #326273;
+            font-size: 16px;
+            background-color: #e3f2f9;
+            padding: 8px 12px;
+            border-radius: 5px;
+            border: 1px solid #5c9ead;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .back-button:hover {
+            background-color: #5c9ead;
+            color: white;
+        }
+        .back-button svg {
+            margin-right: 5px;
+        }
+        .payhead-selection {
+            display: flex;
+            justify-content: space-between;
+        }
+        .payhead-selection > div {
+            flex: 1;
+            margin: 0 10px;
+        }
+        select, input {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            border: 1px solid #5c9ead;
+            background-color: #e3f2f9;
+            color: #326273;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #326273;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #5c9ead;
+        }
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+        }
+        .btn-group button {
+            margin: 0 5px;
+            width: 40px;
+            height: 40px;
+            font-size: 20px;
+            background-color: #5c9ead;
+            color: white;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .btn-group button:hover {
+            background-color: #326273;
+        }
+        .btn-group button.add {
+            background-color: #10e465;
+        }
+        .btn-group button.remove {
+            background-color: #f02c2c;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/admin/payroll" class="back-button">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M15 8a.5.5 0 0 1-.5.5H2.707l3.147 3.146a.5.5 0 0 1-.708.708l-4-4a.5.5 0 0 1 0-.708l4-4a.5.5 0 0 1 .708.708L2.707 7.5H14.5A.5.5 0 0 1 15 8z"/>
+            </svg>
+            Back
+        </a>
+
+        <h2>Add Payheads to Employee</h2>
+        <h3>Employee: <%= empName %> (ID: <%= empId %>) - Month: <%= month %> <%= year %></h3>
+        <form action="/submit-payheads" method="POST">
+            <input type="hidden" name="empId" value="<%= empId %>">
+            <input type="hidden" name="empName" value="<%= empName %>">
+            <input type="hidden" name="month" value="<%= month %>">
+            <input type="hidden" name="year" value="<%= year %>">
+            <div class="payhead-selection">
+                <div>
+                    <h3>List of Pay Heads</h3>
+                    <select id="payheadList" size="10">
+                        <option value="Basic Salary">Basic Salary (Earnings)</option>
+                        <option value="Overtime">Overtime (Earnings)</option>
+                        <option value="Transportation Allowance">Transportation Allowance</option>
+                        <option value="Income Tax">Income Tax (Deductions)</option>
+                        <option value="Leave Deduction">Leave Deduction</option>   
+                    </select>
+                </div>
+                <div class="btn-group">
+                    <button type="button" id="addBtn" class="add">+</button>
+                    <button type="button" id="removeBtn" class="remove">-</button>
+                </div>
+                <div>
+                    <h3>Selected Pay Heads</h3>
+                    <select id="selectedPayheads" name="selectedPayheads[]" size="10" multiple></select>
+                </div>
+                <div>
+                    <h3>Enter Payhead Amounts</h3>
+                    <div id="payheadAmountsContainer"></div>
+                    <button type="submit">Add Pay Heads to Employee</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const payheadList = document.getElementById('payheadList');
+            const selectedPayheads = document.getElementById('selectedPayheads');
+            const payheadAmountsContainer = document.getElementById('payheadAmountsContainer');
+            const addBtn = document.getElementById('addBtn');
+            const removeBtn = document.getElementById('removeBtn');
+
+            function updatePayheadAmounts() {
+                payheadAmountsContainer.innerHTML = '';  // Clear existing inputs
+                Array.from(selectedPayheads.options).forEach(option => {
+                    const input = document.createElement('input');
+                    input.type = 'text';
+                    if (option.value === 'Leave Deduction') {
+                        input.value = "<%= ld %>";
+                        input.readOnly = true;
+                    }
+                    input.name = `amounts[${option.value}]`;
+                    input.placeholder = `Enter amount for ${option.text}`;
+                    payheadAmountsContainer.appendChild(input);
+                });
+            }
+
+            addBtn.addEventListener('click', () => {
+                const selectedOption = payheadList.options[payheadList.selectedIndex];
+                if (selectedOption && !Array.from(selectedPayheads.options).some(option => option.value === selectedOption.value)) {
+                    const newOption = document.createElement('option');
+                    newOption.value = selectedOption.value;
+                    newOption.text = selectedOption.text;
+                    selectedPayheads.add(newOption);
+                    updatePayheadAmounts();
+                }
+            });
+
+            removeBtn.addEventListener('click', () => {
+                const selectedOption = selectedPayheads.options[selectedPayheads.selectedIndex];
+                if (selectedOption) {
+                    selectedOption.remove();
+                    updatePayheadAmounts();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

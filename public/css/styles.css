@@ -1,0 +1,108 @@
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+      
+      .login-container {
+        text-align: center;
+        background-color: rgba(0, 0, 0, 0.7);
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+        width: 300px;
+      }
+      
+      .login-container h1 {
+        color: white;
+        font-size: 24px;
+        margin-bottom: 20px;
+      }
+      
+      .button-container {
+        display: flex;
+        justify-content: space-around;
+      }
+      
+      .btn {
+        display: inline-block;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 5px;
+        text-decoration: none;
+        color: white;
+        transition: background-color 0.3s;
+        width: 100px;
+        text-align: center;
+      }
+      
+      .btn-employee {
+        background-color: #007BFF;
+      }
+      
+      .btn-employee:hover {
+        background-color: #0056b3;
+      }
+      
+      .btn-admin {
+        background-color: #28a745;
+      }
+      
+      .btn-admin:hover {
+        background-color: #1e7e34;
+      }
+      .login-box {
+        width: 300px;
+        padding: 40px;
+        position: absolute;
+        background: #fff;
+        text-align: center;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        border-radius: 10px;
+      }
+      
+      .login-box h1 {
+        margin-bottom: 30px;
+        font-size: 24px;
+      }
+      
+      .textbox {
+        margin-bottom: 20px;
+      }
+      
+      .textbox label {
+        float: left;
+        font-weight: bold;
+        margin-bottom: 5px;
+        display: block;
+      }
+      
+      .textbox input {
+        width: 100%;
+        padding: 10px;
+        margin-top: 5px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+      }
+      
+      .btn-login {
+        width: 100%;
+        background: #28a745;
+        border: none;
+        padding: 10px;
+        cursor: pointer;
+        font-size: 18px;
+        color: white;
+        border-radius: 5px;
+      }
+      
+      .btn-login:hover {
+        background: #218838;
+      }
+      

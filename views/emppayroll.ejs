@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Payroll</title>
+    <style>
+        body {
+            background-color: #D1E9F6;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .calendar-container {
+            max-width: 550px;
+            margin: 50px auto;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #fff;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h2 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .year-selector {
+            margin-bottom: 20px;
+        }
+
+        .year-dropdown {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        .month-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .month-item {
+            padding: 15px 0;
+            background-color: #007bff;
+            color: #fff;
+            border-radius: 5px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        .month-item:hover {
+            background-color: #0056b3;
+        }
+
+        /* Ensure responsive layout on smaller screens */
+        @media (max-width: 600px) {
+            .month-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 400px) {
+            .month-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <%- include('empnavbar.ejs') %>
+    <div class="calendar-container">
+        <h2>Employee Payroll - View Salary Slip</h2>
+        <div class="year-selector">
+            <label for="year" style="font-size: 18px;">Select Year:</label>
+            <select id="year" class="year-dropdown" onchange="updateLinks()">
+                <% 
+                    const currentYear = new Date().getFullYear();
+                    for (let year = currentYear; year >= 2020; year--) { 
+                %>
+                    <option value="<%= year %>"><%= year %></option>
+                <% } %>
+            </select>
+        </div>
+        <div class="month-grid">
+            <% 
+                const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+                months.forEach((month) => { 
+            %>
+            <a style="font-size:25px;padding: 15px;font-weight: bold;" 
+               href="/employee/salary-slip/<%= month %>/<%= currentYear %>" 
+               class="month-item" 
+               data-month="<%= month %>" 
+               data-year="<%= currentYear %>">
+                <%= month %>
+            </a>
+            <% }); %>
+        </div>
+    </div>
+
+    <script>
+        function updateLinks() {
+            const selectedYear = document.getElementById('year').value;
+            const monthItems = document.querySelectorAll('.month-item');
+            monthItems.forEach((item) => {
+                const month = item.getAttribute('data-month');
+                item.href = `/employee/salary-slip/${month}/${selectedYear}`;
+            });
+        }
+    </script>
+</body>
+</html>

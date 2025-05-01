@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yearly Attendance Calendar</title>
+    <link rel="stylesheet" type="text/css" href="/css/emp.css">
+    <style>
+        /* Additional styles to keep sidebar working as per the existing CSS */
+        .calendar-container {
+            max-width: 550px;
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            text-align: center;
+        }
+        .year-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .month-item {
+            padding: 15px;
+            background-color: #007bff;
+            color: #fff;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+        }
+        .month-item:hover {
+            background-color: #0056b3;
+        }
+
+        .year-selector {
+            margin-bottom: 20px;
+        }
+        .year-selector select {
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+
+
+    @media (max-width: 768px) {
+        /* Sidebar toggle for smaller screens */
+        #toggleSidebar {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* Sidebar adjustments */
+        .sidebar {
+            position: fixed;
+            left: -250px;
+            top: 0;
+            width: 250px;
+            height: 100%;
+            background-color: #333;
+            transition: left 0.3s ease-in-out;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+
+        .sidebar.open {
+            left: 0;
+        }
+
+        /* Adjusting menu items for mobile */
+        .sidebar-menu li {
+            padding: 10px;
+            text-align: center;
+        }
+
+        .sidebar-menu li a {
+            font-size: 16px;
+        }
+
+        /* Main content when sidebar is toggled */
+        .main-content {
+            margin-left: 0;
+            padding: 15px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        /* Further adjustments for smaller screens */
+        .calendar-container {
+            padding: 10px;
+        }
+
+        .month-item {
+            font-size: 14px;
+            padding: 10px;
+        }
+
+        .year-selector label {
+            font-size: 14px;
+        }
+
+        .year-selector select {
+            width: 100%;
+            font-size: 14px;
+        }
+
+        h1 {
+            font-size: 20px;
+        }
+    }
+
+    </style>
+</head>
+<body>
+    <!-- Sidebar toggle button -->
+    <button id="toggleSidebar">☰</button>
+
+    <!-- Sidebar -->
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <h2>Menu</h2>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="/employee/dashboard/<%= emp_id %>">Home</a></li>
+            <li class="dropdown">
+                <a class="dropdown-toggle">Leave</a>
+                <ul class="dropdown-menu">
+                    <li><a href="/employee/apply-leave">Apply Leave</a></li>
+                    <li><a href="/employee/leave-history/<%= emp_id %>">Leave History</a></li>
+                </ul>
+            </li>
+            <li><a href="/employee/attendance">Attendance</a></li>
+            <li><a href="/employee/payroll">Payrolls</a></li>
+            <li><a href="/employee/<%= emp_id %>/qr">Feedback</a></li>
+            <li><a href="/">Logout</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main content -->
+    <div class="main-content">
+        <div class="calendar-container">
+            <h1>Yearly Attendance Calendar</h1>
+
+            <!-- Year Selector -->
+            <div class="year-selector">
+                <form method="get" action="">
+                    <label for="year">Select Year:</label>
+                    <select id="year" name="year" onchange="this.form.submit()">
+                        <% const currentYear = new Date().getFullYear(); %>
+                        <% for (let year = currentYear; year >= 2020; year--) { %>
+                            <option value="<%= year %>" <%= year === parseInt(req.query.year || currentYear) ? 'selected' : '' %>>
+                                <%= year %>
+                            </option>
+                        <% } %>
+                    </select>
+                </form>
+            </div>
+
+            <!-- Monthly Calendar -->
+            <div class="year-grid">
+                <% const selectedYear = parseInt(req.query.year || currentYear); %>
+                <% for (let month = 1; month <= 12; month++) { %>
+                    <div class="month-item">
+                        <% if(type=="emp") { %>
+                            <a style="text-decoration: none; color: white;" href="/employee/your-attendance?year=<%= selectedYear %>&month=<%= month %>">
+                        <% } else { %> 
+                            <a href="/month/<%= selectedYear %>/<%= month %>">
+                        <% } %>
+                            <h2><%= new Date(0, month - 1).toLocaleString('default', { month: 'long' }) %></h2>
+                        </a>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar Toggle Script -->
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const sidebar = document.querySelector('.sidebar');
+        const toggleSidebarButton = document.getElementById('toggleSidebar');
+
+        // Toggle sidebar
+        toggleSidebarButton.addEventListener('click', () => {
+            sidebar.classList.toggle('closed');
+        });
+      });
+    </script>
+</body>
+</html>

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Yearly Attendance Calendar</title>
+  <link rel="stylesheet" type="text/css" href="/css/admin.css">
+  <style>
+    body {
+      background-color: #D1E9F6;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    .calendar-container {
+      max-width: 550px;
+      margin: 20px auto;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      background-color: #fff;
+      text-align: center;
+    }
+    .year-selector {
+      margin-bottom: 20px;
+    }
+    .year-selector select {
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    .year-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      margin-top: 20px;
+    }
+    .month-item {
+      padding: 15px;
+      background-color: #007bff;
+      color: #fff;
+      border-radius: 5px;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+    }
+    .month-item:hover {
+      background-color: #0056b3;
+    }
+    .month-item a {
+      text-decoration: none;
+      color: white;
+    }
+    .main-content {
+      flex: 1;
+      padding: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Include Navbar -->
+    <nav class="sidebar">
+      <div class="sidebar-header">
+        <h2>Menu</h2>
+        <button id="toggleSidebar">☰</button>
+      </div>
+      <ul class="sidebar-menu">
+        <li><a href="/admin/dashboard">Home</a></li>
+        <li><a class="dropdown-toggle">Employees</a>
+          <ul class="dropdown-menu">
+            <li><a href="/admin/add-employee">Add Employee</a></li>
+            <li><a href="/admin/employees/all">All Employees</a></li>
+          </ul>
+        </li>
+        <li><a class="dropdown-toggle">Leave Applications</a>
+          <ul class="dropdown-menu">
+            <li><a href="/admin/leave-applications">All Leaves</a></li>
+          </ul>
+        </li>
+        <li><a href="/admin/Attendance">Attendance</a></li>
+        <li><a href="/admin/payroll">Payrolls</a></li>
+        <li><a href="/admin/feedback">Feedback</a></li>
+        <li><a href="/">Logout</a></li>
+      </ul>
+    </nav>
+
+    <div class="main-content">
+      <div class="calendar-container">
+        <h1>Yearly Attendance Calendar</h1>
+
+        <!-- Year Selector -->
+        <div class="year-selector">
+          <form method="get" action="">
+            <label for="year">Select Year:</label>
+            <select id="year" name="year" onchange="this.form.submit()">
+              <% const currentYear = new Date().getFullYear(); %>
+              <% for (let year = currentYear; year >= 2020; year--) { %>
+                <option value="<%= year %>" <%= year === parseInt(req.query.year || currentYear) ? 'selected' : '' %>>
+                  <%= year %>
+                </option>
+              <% } %>
+            </select>
+          </form>
+        </div> 
+
+        <!-- Monthly Calendar -->
+        <div class="year-grid">
+          <% const selectedYear = parseInt(req.query.year || currentYear); %>
+          <% for (let month = 1; month <= 12; month++) { %>
+            <div class="month-item">
+              <% if (type === "emp") { %>
+                <a href="/employee/your-attendance?year=<%= selectedYear %>&month=<%= month %>">
+              <% } else { %>
+                <a href="/month/<%= selectedYear %>/<%= month %>">
+              <% } %>
+                  <h2><%= new Date(0, month - 1).toLocaleString('default', { month: 'long' }) %></h2>
+                </a>
+            </div>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const sidebar = document.querySelector('.sidebar');
+      const toggleSidebarButton = document.getElementById('toggleSidebar');
+
+      // Toggle sidebar
+      toggleSidebarButton.addEventListener('click', () => {
+        sidebar.classList.toggle('closed');
+        toggleSidebarButton.textContent = sidebar.classList.contains('closed') ? '☰' : '☰';
+      });
+    });
+  </script>
+</body>
+</html>

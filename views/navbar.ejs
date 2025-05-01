@@ -1,0 +1,55 @@
+<head>
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" type="text/css" href="/css/admin.css">
+  </head>
+  <body>
+          <nav class="sidebar">
+              <div class="sidebar-header">
+                  <h2>Menu</h2>
+                  <button id="toggleSidebar">☰</button>
+              </div>
+              <ul class="sidebar-menu">
+                  <li><a href="/admin/dashboard">Home</a></li>
+                  
+                  <li><a class="dropdown-toggle">Employees</a>
+                      <ul class="dropdown-menu">
+                          <li><a href="/admin/add-employee">Add Employee</a></li>
+                          <li><a href="/admin/employees/all">All Employees</a></li>
+                        </ul>
+                      </li>
+                <li><a class="dropdown-toggle">Leave Applications</a>
+                    <ul class="dropdown-menu">
+                    <li><a href="/admin/leave-applications">All Leaves</a></li>
+                    </ul>
+                </li>
+                  <li><a href="/admin/Attendance">Attendance</a></li>
+                  <li><a href="/admin/payroll">Payrolls</a></li>
+                  <li><a href="/admin/feedback">Feedback</a></li>
+                  <li><a href="/">Logout</a></li>
+              </ul>
+          </nav>
+          <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const sidebar = document.querySelector('.sidebar');
+                const toggleSidebarButton = document.getElementById('toggleSidebar');
+                const loginInfo = document.getElementById('loginInfo');
+    
+                // Toggle sidebar
+                toggleSidebarButton.addEventListener('click', () => {
+                    sidebar.classList.toggle('closed');
+                    if (sidebar.classList.contains('closed')) {
+                        toggleSidebarButton.textContent = '☰'; // Show the open icon
+                        toggleSidebarButton.style.opacity = "0"                   
+                    } else {
+    
+                        toggleSidebarButton.textContent = '☰'; // Show the close icon
+                    }
+                });
+                toggleSidebarButton.addEventListener("mouseover",() =>{
+                toggleSidebarButton.style.opacity = "1"
+    
+            });
+        });
+        </script>  
+  </body>      
+  </html>

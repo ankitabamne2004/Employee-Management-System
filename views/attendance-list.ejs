@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance List</title>
+    
+</head>
+    <style>
+
+body {
+            background-color: #D1E9F6;
+            font-family: Arial, sans-serif;
+            color: black;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #326273;
+            margin-bottom: 20px;
+        }
+
+        form {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #5c9ead;
+            color: white;
+        }
+
+        /* tr:nth-child(even) {
+            background-color: #e3f2f9;
+        } */
+
+        tr:hover {
+            background-color: #c1e4f7;
+        }
+
+        input[type="radio"] {
+            margin: 0 5px;
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #5c9ead;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #326273;
+        }
+        
+
+    </style>
+</head>
+<body>
+
+
+    <div style="text-align: center; margin-bottom: 20px;">
+        <a href="/month/<%= date.getFullYear() %>/<%= date.getMonth() + 1 %>" style="padding: 12px 25px; background-color: #326273; color: white; text-decoration: none; border-radius: 8px; font-size: 16px; transition: background-color 0.3s ease;">
+            Back to Monthly Calendar
+        </a>
+    </div>
+
+    <h1>Attendance for <%= date.toDateString() %></h1>
+    
+    
+    <form action="/attendance/<%= date.getFullYear() %>/<%= date.getMonth() + 1 %>/<%= date.getDate() %>" method="POST">
+        <table>
+            <thead>
+                <tr>
+                    <th>Employee ID</th>
+                    <th>Name</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% employees.forEach(employee => { %>
+                    <tr>
+                        <td><%= employee.emp_id %></td>
+                        <td><%= employee.username %></td>
+                        <td>
+                            <% const attendanceRecord = attendanceList.find(record => record.emp_id === employee.emp_id); %>
+                            <input type="radio" name="attendance[<%= employee.emp_id %>]" value="Present" <%= attendanceRecord && attendanceRecord.status === 'Present' ? 'checked' : '' %>> Present
+                            <input type="radio" name="attendance[<%= employee.emp_id %>]" value="Absent" <%= attendanceRecord && attendanceRecord.status === 'Absent' ? 'checked' : '' %>> Absent
+                        </td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+        <button type="submit">Submit Attendance</button>
+    </form>
+</body>
+</html> 

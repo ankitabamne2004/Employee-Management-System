@@ -1,0 +1,97 @@
+<!-- views/leave-applications.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Leave Applications</title>
+    <link rel="stylesheet" href="/css/leave.css">
+    <style>
+        /* Style for the Accept button */
+        button.accept {
+            background-color: green;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        button.accept:hover {
+            background-color: darkgreen;
+        }
+
+        /* Style for the Reject button */
+        button.reject {
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        button.reject:hover {
+            background-color: darkred;
+        }
+    </style>
+</head>
+<body>
+    <%- include('navbar.ejs') %>
+    <!--h3>All Leave Applications</h3-->
+    <table>
+        <thead>
+            <tr>
+                <th>Employee ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Number of Days</th>
+                <th>Leave Type</th>
+                <th>Reason</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% leaves.forEach(leave => { %>
+                <tr>
+                    <td><%= leave.emp_id %></td>
+                    <td><%= leave.firstName %> <%= leave.lastName %></td>
+                    <td><%= leave.email %></td>
+                    <td><%= leave.startDate.toDateString() %></td>
+                    <td><%= leave.endDate.toDateString() %></td>
+                    <td><%= leave.numberOfDays %></td>
+                    <td><%= leave.leaveType %></td>
+                    <td>
+                        <!-- Display the reason if it's "Other", otherwise leave blank -->
+                        <% if (leave.leaveType === 'Other') { %>
+                            <%= leave.otherReason %>
+                        <% } else { %>
+                            N/A
+                        <% } %>
+                    </td>
+                    <!--<td><%= leave.reason %></td>-->
+                    <td><%= leave.status %></td>
+                    <td>
+                        <% if (leave.status === 'Pending') { %>
+                            <form action="/admin/leave-applications/<%= leave._id %>/accept" method="POST" style="display:inline;">
+                                <button type="submit" class="accept">Accept</button>
+                            </form>
+                            </form>
+                            <form action="/admin/leave-applications/<%= leave._id %>/reject" method="POST" style="display:inline;">
+                                <button type="submit" class="reject">Reject</button>
+                            </form>
+                            </form>
+                        <% } else { %>
+                            <span><%= leave.status %></span>
+                        <% } %>
+                    </td>
+                </tr>
+            <% }) %>
+        </tbody>
+    </table>
+</body>
+</html>

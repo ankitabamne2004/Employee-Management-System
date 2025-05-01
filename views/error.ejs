@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background: #f2f2f2;
+        }
+        .error-container {
+            text-align: center;
+            padding: 20px;
+            background: #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        .error-container h1 {
+            font-size: 72px;
+            margin: 0;
+            color: #ff6f61;
+        }
+        .error-container h2 {
+            font-size: 24px;
+            margin: 10px 0;
+            color: #333;
+        }
+        .error-container p {
+            font-size: 18px;
+            margin: 20px 0;
+            color: #666;
+        }
+        .error-container a {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            color: #fff;
+            background-color: #ff6f61;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        .error-container a:hover {
+            background-color: #e65c50;
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <h2>Oops! Something went wrong</h2>
+        <p><%= errorMessage %></p>
+        <a href="/admin/login">Go Back</a>
+    </div>
+</body>
+</html>

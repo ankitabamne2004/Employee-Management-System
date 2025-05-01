@@ -1,0 +1,134 @@
+<!--DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Employee</title>
+    <link rel="stylesheet" href="/css/admin.css"> 
+</head>
+<body>
+    <div class="container">
+        <h1>Edit Employee Details</h1>
+        <form action="/admin/employees/edit/<%= employee._id %>" method="POST">
+            <label for="emp_id">Employee ID:</label>
+            <input type="text" name="emp_id" id="emp_id" value="<%= employee.emp_id %>" readonly><br>
+            
+            <label for="username">Username:</label>
+            <input type="text" name="username" id="username" value="<%= employee.username %>" required><br>
+            
+            <label for="email">Email:</label>
+            <input type="email" name="email" id="email" value="<%= employee.email %>" required><br>
+            
+            <label for="salary">Salary:</label>
+            <input type="number" name="salary" id="salary" value="<%= employee.salary %>" required><br>
+            
+            <label for="address">Address:</label>
+            <input type="text" name="address" id="address" value="<%= employee.address %>" required><br>
+            
+            <label for="number">Phone Number:</label>
+            <input type="text" name="number" id="number" value="<%= employee.number %>" required><br>
+            
+            <button type="submit">Update Employee</button>
+        </form>
+    </div>
+</body>
+</html-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Employee</title>
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 20px;
+            color: #ff4d4d;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .close-btn:hover {
+            color: darkred;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #333;
+        }
+        input[type="text"], input[type="email"], input[type="number"] {
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/admin/employees/all" class="close-btn">&times;</a>
+        <h1>Edit Employee Details</h1>
+        <form action="/admin/employees/edit/<%= employee._id %>" method="POST">
+            <label for="emp_id">Employee ID:</label>
+            <input type="text" name="emp_id" id="emp_id" value="<%= employee.emp_id %>" readonly>
+            
+            <label for="username">Username:</label>
+            <input type="text" name="username" id="username" value="<%= employee.username %>" required>
+            
+            <label for="email">Email:</label>
+            <input type="email" name="email" id="email" value="<%= employee.email %>" required>
+            
+            <label for="salary">Salary:</label>
+            <input type="number" name="salary" id="salary" value="<%= employee.salary %>" required>
+            
+            <label for="address">Address:</label>
+            <input type="text" name="address" id="address" value="<%= employee.address %>" required>
+            
+            <label for="number">Phone Number:</label>
+            <input type="text" name="number" id="number" value="<%= employee.number %>" required>
+            
+            <button type="submit">Update Employee</button>
+        </form>
+    </div>
+</body>
+</html>

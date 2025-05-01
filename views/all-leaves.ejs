@@ -1,0 +1,31 @@
+<h1>All Leave Applications</h1>
+<table>
+  <thead>
+    <tr>
+      <th>Employee ID</th>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Start Date</th>
+      <th>End Date</th>
+      <th>Number of Days</th>
+      <th>Leave Type</th>
+      <th>Reason</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% leaveApplications.forEach(leave => { %>
+      <tr>
+        <td><%= leave.emp_id %></td>
+        <td><%= leave.firstName %> <%= leave.lastName %></td>
+        <td><%= leave.email %></td>
+        <td><%= leave.startDate.toDateString() %></td>
+        <td><%= leave.endDate.toDateString() %></td>
+        <td><%= leave.numberOfDays %></td>
+        <td><%= leave.leaveType %></td>
+        <td><%= leave.leaveType === 'Other' ? leave.otherReason : '-' %></td>
+        <td><%= leave.status %></td>
+      </tr>
+    <% }) %>
+  </tbody>
+</table>

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirm Payheads</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #D1E9F6;
+            margin: 0;
+            padding: 20px;
+        }
+        .receipt-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        .receipt-header {
+            text-align: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+        }
+        .receipt-header h2 {
+            margin: 0;
+            color: #007bff;
+        }
+        .receipt-header h3 {
+            margin: 5px 0;
+            color: #333;
+        }
+        .receipt-body {
+            margin-bottom: 20px;
+        }
+        .receipt-body h4 {
+            margin-bottom: 10px;
+            color: #555;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+        }
+        .receipt-body table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        .receipt-body th, .receipt-body td {
+            text-align: left;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        .receipt-body th {
+            background-color: #f9f9f9;
+        }
+        .receipt-body td {
+            background-color: #fff;
+        }
+        .total {
+            text-align: right;
+            padding: 10px;
+            background-color: #326273;
+            color: white;
+            border-radius: 5px;
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        .receipt-footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #777;
+        }
+        .btn-print {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #326273;
+            color: white;
+            text-align: center;
+            border-radius: 5px;
+            text-decoration: none;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        .btn-print:hover {
+            background-color: #0056b3;
+        }
+
+        /* Cancel icon styling */
+        .cancel-icon {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 24px;
+            color: red;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .cancel-icon:hover {
+            color: darkred;
+        }
+
+        /* Highlight Income Tax and Leave Deduction in red */
+        .red-highlight {
+            color: red;
+        }
+
+        /* Highlight other payheads in green */
+        .green-highlight {
+            color: green;
+        }
+
+        /* Hide elements not needed for print */
+        @media print {
+            body, html {
+                background-color: #fff;
+                margin: 0;
+                padding: 0;
+            }
+            .btn-print, .cancel-icon {
+                display: none;
+            }
+            .receipt-container {
+                box-shadow: none;
+                border: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="receipt-container">
+    <!-- Cancel Icon -->
+    <a 
+    href="<%= type === 'admin' ? `/admin/payroll` : `/employee/payroll` %>" 
+    title="Cancel"
+    style="text-decoration: none; font-size: 24px; color: red; float: right;">
+    &times;
+</a>
+
+    <div class="receipt-header">
+        <h2>Employee Payhead Confirmation</h2>
+        <h3><%= empName %> (ID: <%= empId %>)</h3>
+        <h3>Month: <%= month %> <%= year %></h3>
+    </div>
+
+    <div class="receipt-body">
+        <h4>Payhead Details</h4>
+        <table>
+            <thead>
+                <tr>
+                    <th>Payhead</th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% const payheads = Object.keys(amounts) %>
+                <% let total = 0; %>
+                <% payheads.forEach(payhead => { %>
+                    <% let amount = parseFloat(amounts[payhead]) || 0; %>
+                    <% if (payhead === 'Income Tax' || payhead === 'Leave Deduction') { %>
+                        <tr class="red-highlight">
+                            <td><%= payhead %></td>
+                            <td><%= amount.toFixed(2) %></td>
+                        </tr>
+                        <% total -= amount; %>
+                    <% } else { %>
+                        <tr class="green-highlight">
+                            <td><%= payhead %></td>
+                            <td><%= amount.toFixed(2) %></td>
+                        </tr>
+                        <% total += amount; %>
+                    <% } %>
+                <% }); %>
+                <tr>
+                    <td><strong>Total</strong></td>
+                    <td><strong><%= total.toFixed(2) %></strong></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="total">
+            Total: ₹ <%= total.toFixed(2) %>
+        </div>
+    </div>
+
+    <div class="receipt-footer">
+        <p>Thank you for processing the payroll!</p>
+        <a href="#" onclick="window.print()" class="btn-print">Print Receipt</a>
+    </div>
+</div>
+
+</body>
+</html>

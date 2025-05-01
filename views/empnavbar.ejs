@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/css/emp.css">
+
+</head>
+<body>
+    <body>
+        <div class="container">
+            <button id="toggleSidebar">☰</button> <!-- Move the button outside the sidebar -->
+            <nav class="sidebar">
+            <div class="sidebar-header">
+                    <h2 style="color: white;">Menu</h2>
+                </div>
+                <ul class="sidebar-menu">
+                    <li><a href="/employee/dashboard/<%= emp_id%>">Home</a></li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle">Leave</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/employee/apply-leave">Apply Leave</a></li>
+                            <li><a href="/employee/leave-history/<%= emp_id %>">Leave History</a></li>
+
+                            <!--Leave history wale line missing hai -->
+                        </ul>
+                    </li>
+                    <li><a href="/employee/attendance">Attendance</a></li>
+                    <li><a href="/employee/payroll">Payrolls</a></li>
+                    <li><a href="/employee/<%= emp_id %>/qr">Feedback</a></li>
+                    <li><a href="/">Logout</a></li>
+                </ul>
+            </nav>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+    const sidebar = document.querySelector('.sidebar');
+    const toggleSidebarButton = document.getElementById('toggleSidebar');
+
+    // Toggle sidebar
+    toggleSidebarButton.addEventListener('click', () => {
+        sidebar.classList.toggle('closed');
+        if (sidebar.classList.contains('closed')) {
+            toggleSidebarButton.textContent = '☰'; // Show the open icon
+        } else {
+            toggleSidebarButton.textContent = '☰'; // Show the close icon
+        }
+    });
+});
+  </script>
+</body>
+</html>
